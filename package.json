@@ -1,0 +1,24 @@
+{
+  "name": "e-pood",
+  "version": "1.0.0",
+  "description": "",
+  "main": "style.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polluste888/e-pood.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/polluste888/e-pood/issues"
+  },
+  "homepage": "https://github.com/polluste888/e-pood#readme",
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
+}
