@@ -4,13 +4,11 @@ export function renderFavorites() {
   const container = document.querySelector("#favorites-view");
   container.innerHTML = "<h2>Lemmikud</h2>";
 
-  
   if (favorites.length === 0) {
     container.innerHTML += "<p>Lemmikuid pole veel lisatud.</p>";
     return;
   }
 
-  
   favorites.forEach((product) => {
     const div = document.createElement("div");
     div.className = "favorite-item";
@@ -21,13 +19,12 @@ export function renderFavorites() {
       <button class="remove-fav">Remove</button>
     `;
 
-    
     div.querySelector(".remove-fav").addEventListener("click", () => {
-      const index = favorites.findIndex(f => f.id === product.id);
+      const index = favorites.findIndex((f) => f.id === product.id);
       if (index !== -1) {
         favorites.splice(index, 1);
       }
-      renderFavorites(); 
+      renderFavorites();
     });
 
     container.appendChild(div);
