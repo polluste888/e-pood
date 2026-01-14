@@ -1,7 +1,13 @@
 import { Cart } from "./constructors/cart.js";
-
-import { FetchProducts } from "./api.js";
-
+import {
+  FetchProducts,
+  FetchCategories,
+  FetchProductsByCategory,
+  FetchCustomer,
+  FetchFavorites,
+  AddFavorite,
+  RemoveFavorite,
+} from "./api.js";
 import { renderFavorites } from "./Allviews/favoritesView.js";
 import { renderProductDetails } from "./Allviews/productDetailView.js";
 
@@ -18,10 +24,17 @@ export {
   confirmOrder,
 };
 
-const products = await FetchProducts();
+let products = [];
+let customer = { name: "Klient" };
 const cart = new Cart();
-const favorites = [];
+let favorites = [];
 
+const savedCart = localStorage.getItem("shopping-cart");
+if (savedCart) {
+  const parsed = JSON.parse(savedCart);
+
+  cart.items = parsed.items || [];
+}
 
 function setTitle(text) {
   const el = document.querySelector("#page-title");
@@ -34,32 +47,74 @@ function hideAllViews() {
     "#product-details",
     "#cart-view",
     "#favorites-view",
+    "#category-filters",
   ].forEach((id) => {
     const el = document.querySelector(id);
     if (el) el.style.display = "none";
   });
 }
 
+function updateCartBadge() {
+  const badge = document.querySelector("#cart-count");
+  if (!badge) return;
 
-function renderProducts() {
+  const totalQty = cart.items.reduce((sum, item) => sum + item.qty, 0);
+  badge.textContent = `🛒 ${totalQty}`;
+
+  localStorage.setItem("shopping-cart", JSON.stringify(cart));
+}
+
+async function renderCategoryFilters() {
+  const categories = await FetchCategories();
+  const filterContainer = document.querySelector("#category-filters");
+  if (!filterContainer) return;
+
+  filterContainer.innerHTML = "";
+
+  const allBtn = document.createElement("button");
+  allBtn.textContent = "Kõik";
+  allBtn.className = "filter-btn";
+  allBtn.addEventListener("click", () => renderProducts(products));
+  filterContainer.appendChild(allBtn);
+
+  categories.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+    btn.className = "filter-btn";
+    btn.addEventListener("click", async () => {
+      const filtered = await FetchProductsByCategory(cat);
+      renderProducts(filtered);
+    });
+    filterContainer.appendChild(btn);
+  });
+}
+
+function renderProducts(itemsToRender = null) {
   hideAllViews();
-  setTitle("Kõik tooted");
+  setTitle("Tooted");
+
+  const filterContainer = document.querySelector("#category-filters");
+  if (filterContainer) filterContainer.style.display = "flex";
 
   const container = document.querySelector("#product-list");
   container.style.display = "flex";
   container.innerHTML = "";
 
-  products.forEach((p) => {   
+  const list = itemsToRender || products;
+
+  list.forEach((p) => {
     const card = document.createElement("div");
     card.className = "product-card";
+
+    const img = document.createElement("img");
+    img.src = p.image;
+    img.className = "product-image";
+    img.alt = p.title;
 
     const title = document.createElement("h3");
     title.className = "product-title";
     title.textContent = p.title;
     title.addEventListener("click", () => renderProductDetails(p));
-
-    const cat = document.createElement("p");
-    cat.textContent = `Kategooria: ${p.category}`;
 
     const price = document.createElement("p");
     price.textContent = `Hind: €${p.price.toFixed(2)}`;
@@ -75,158 +130,102 @@ function renderProducts() {
 
     const favBtn = document.createElement("button");
     favBtn.className = "add-to-favorites";
-    favBtn.textContent = favorites.some((f) => f.id === p.id)
-      ? "❤️ Eemalda"
-      : "🤍 Lemmik";
+    const isFav = favorites.some((f) => f.id === p.id);
+    favBtn.textContent = isFav ? "❤️" : "🤍";
+
     favBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleFavorite(p);
     });
 
-    card.appendChild(title);
-    card.appendChild(cat);
-    card.appendChild(price);
-    card.appendChild(addBtn);
-    card.appendChild(favBtn);
-
+    card.append(img, title, price, addBtn, favBtn);
     container.appendChild(card);
   });
 }
-
-
 
 function renderCart() {
   hideAllViews();
   setTitle("Ostukorv");
   const container = document.querySelector("#cart-view");
   container.style.display = "block";
-  container.innerHTML = "";
-
-  const h2 = document.createElement("h2");
-  h2.textContent = "Ostukorv";
-  container.appendChild(h2);
+  container.innerHTML = "<h2>Ostukorv</h2>";
 
   if (cart.items.length === 0) {
-    const empty = document.createElement("p");
-    empty.textContent = "Ostukorv on tühi";
-    container.appendChild(empty);
+    container.innerHTML += "<p>Ostukorv on tühi</p>";
     return;
   }
 
   cart.items.forEach((item) => {
     const row = document.createElement("div");
     row.className = "cart-row";
+    row.innerHTML = `
+      <span>${item.product.title}</span>
+      <input type="number" min="1" value="${item.qty}" class="cart-qty">
+      <span>€${(item.product.price * item.qty).toFixed(2)}</span>
+      <button class="remove-item">❌</button>
+    `;
 
-    const t = document.createElement("span");
-    t.className = "cart-title";
-    t.textContent = item.product.title;
-
-    const qty = document.createElement("input");
-    qty.type = "number";
-    qty.min = "1";
-    qty.value = String(item.qty);
-    qty.className = "cart-qty";
-    qty.addEventListener("change", () => {
-      cart.changeQty(item.product.id, qty.value);
+    row.querySelector(".cart-qty").addEventListener("change", (e) => {
+      cart.changeQty(item.product.id, parseInt(e.target.value));
       updateCartBadge();
       renderCart();
     });
 
-    const lineSum = document.createElement("span");
-    lineSum.className = "cart-line-sum";
-    lineSum.textContent = `€${(item.product.price * item.qty).toFixed(2)}`;
-
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "cart-remove";
-    removeBtn.textContent = "❌";
-    removeBtn.addEventListener("click", () => {
+    row.querySelector(".remove-item").addEventListener("click", () => {
       cart.removeProduct(item.product.id);
       updateCartBadge();
       renderCart();
     });
 
-    row.appendChild(t);
-    row.appendChild(qty);
-    row.appendChild(lineSum);
-    row.appendChild(removeBtn);
-
     container.appendChild(row);
   });
 
   const totals = cart.calculateTotals();
+  const summary = document.createElement("div");
+  summary.innerHTML = `
+    <hr>
+    <p>Neto: €${totals.subtotal.toFixed(2)}</p>
+    <p>KM: €${totals.vat.toFixed(2)}</p>
+    <p><strong>Kokku: €${totals.total.toFixed(2)}</strong></p>
+    <button id="btn-buy">Osta</button>
+    <button id="btn-clear">Tühjenda</button>
+  `;
 
-  const hr = document.createElement("hr");
-  container.appendChild(hr);
-
-  const net = document.createElement("p");
-  net.textContent = `Netosumma: €${totals.subtotal.toFixed(2)}`;
-  const vat = document.createElement("p");
-  vat.textContent = `Käibemaks (20%): €${totals.vat.toFixed(2)}`;
-  const total = document.createElement("p");
-  total.innerHTML = `<strong>Kokku: €${totals.total.toFixed(2)}</strong>`;
-
-  const buyBtn = document.createElement("button");
-  buyBtn.textContent = "Osta";
-  buyBtn.addEventListener("click", () => confirmOrder());
-
-  const clearBtn = document.createElement("button");
-  clearBtn.textContent = "Tühista ostukorv";
-  clearBtn.addEventListener("click", () => {
+  summary.querySelector("#btn-buy").addEventListener("click", confirmOrder);
+  summary.querySelector("#btn-clear").addEventListener("click", () => {
     clearCart();
-
     renderCart();
   });
 
-  container.appendChild(net);
-  container.appendChild(vat);
-  container.appendChild(total);
-  container.appendChild(buyBtn);
-  container.appendChild(clearBtn);
+  container.appendChild(summary);
 }
 
-document.querySelector("#nav-home").addEventListener("click", () => {
-  renderProducts();
-  updateCartBadge();
-});
-
-document.querySelector("#nav-cart").addEventListener("click", () => {
-  renderCart();
-  updateCartBadge();
-});
-
+document
+  .querySelector("#nav-home")
+  .addEventListener("click", () => renderProducts(products));
+document.querySelector("#nav-cart").addEventListener("click", renderCart);
 document.querySelector("#nav-favorites").addEventListener("click", () => {
   hideAllViews();
-  const favView = document.querySelector("#favorites-view");
-  favView.style.display = "block";
+  document.querySelector("#favorites-view").style.display = "block";
   renderFavorites();
-  updateCartBadge();
 });
 
-document.querySelector("#nav-logo").addEventListener("click", (e) => {
-  e.preventDefault();
-  renderProducts();
-  updateCartBadge();
-});
-
-function updateCartBadge() {
-  const badge = document.querySelector("#cart-count");
-  if (!badge) return;
-  const totalQty = cart.items.reduce((sum, item) => sum + item.qty, 0);
-
-  badge.textContent = `🛒 ${totalQty}`;
-}
-
-function toggleFavorite(product) {
+async function toggleFavorite(product) {
   const index = favorites.findIndex((f) => f.id === product.id);
-  if (index === -1) favorites.push(product);
-  else favorites.splice(index, 1);
 
-  const isFavOpen =
-    document.querySelector("#favorites-view")?.style.display === "block";
-  if (isFavOpen) renderFavorites();
+  if (index === -1) {
+    favorites = await AddFavorite(product);
+  } else {
+    favorites = await RemoveFavorite(product.id);
+  }
 
-  renderProducts();
-  updateCartBadge();
+  const isFavView =
+    document.querySelector("#favorites-view").style.display === "block";
+  if (isFavView) {
+    renderFavorites();
+  } else {
+    renderProducts();
+  }
 }
 
 function clearCart() {
@@ -235,13 +234,41 @@ function clearCart() {
 }
 
 function confirmOrder() {
-  if (cart.items.length === 0) {
-    alert("Ostukorv on tühi!");
-    return;
-  }
-  alert(`Tellimus kinnitatud! Aitäh ostu eest, ${customer.name}`);
+  if (cart.items.length === 0) return alert("Ostukorv on tühi!");
+  alert(`Tellimus kinnitatud! Aitäh, ${customer.name}!`);
   clearCart();
+  renderProducts(products);
 }
 
+async function initApp() {
+  try {
+    const savedCustomer = localStorage.getItem("shop-customer");
 
-updateCartBadge();
+    const [fetchedProducts, fetchedFavorites] = await Promise.all([
+      FetchProducts(),
+      FetchFavorites(),
+    ]);
+
+    products = fetchedProducts;
+    favorites = fetchedFavorites;
+
+    if (savedCustomer) {
+      customer = JSON.parse(savedCustomer);
+    } else {
+      const serverCustomer = await FetchCustomer();
+      if (serverCustomer) {
+        customer = serverCustomer;
+        localStorage.setItem("shop-customer", JSON.stringify(customer));
+      }
+    }
+
+    await renderCategoryFilters();
+    renderProducts(products);
+
+    updateCartBadge();
+  } catch (err) {
+    console.error("Rakenduse käivitamine ebaõnnestus:", err);
+  }
+}
+
+initApp();
