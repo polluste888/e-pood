@@ -4,19 +4,19 @@ export function renderCart() {
   const container = document.querySelector("#cart-view");
   container.innerHTML = "<h2>Ostukorv</h2>";
 
-  
   if (cart.items.length === 0) {
     container.innerHTML += "<p>Ostukorv on tühi.</p>";
     return;
   }
 
-  
   cart.items.forEach((item) => {
     const div = document.createElement("div");
     div.className = "cart-item";
 
     div.innerHTML = `
-      <img src="${item.product.image}" alt="${item.product.title}" class="cart-image">
+      <img src="${item.product.image}" alt="${
+      item.product.title
+    }" class="cart-image">
       <p>${item.product.title}</p>
 
       <div class="quantity-controls">
@@ -30,13 +30,11 @@ export function renderCart() {
       <p>€${(item.product.price * item.quantity).toFixed(2)}</p>
     `;
 
-    
     div.querySelector(".increase").addEventListener("click", () => {
       item.quantity++;
       renderCart();
     });
 
-    
     div.querySelector(".decrease").addEventListener("click", () => {
       item.quantity--;
       if (item.quantity <= 0) {
@@ -45,7 +43,6 @@ export function renderCart() {
       renderCart();
     });
 
-    
     div.querySelector(".remove").addEventListener("click", () => {
       cart.removeProduct(item.product.id);
       renderCart();
@@ -54,8 +51,9 @@ export function renderCart() {
     container.appendChild(div);
   });
 
-  
   const total = document.createElement("p");
-  total.innerHTML = `<strong>Kogusumma: €${cart.calculateTotal().toFixed(2)}</strong>`;
+  total.innerHTML = `<strong>Kogusumma: €${cart
+    .calculateTotal()
+    .toFixed(2)}</strong>`;
   container.appendChild(total);
 }

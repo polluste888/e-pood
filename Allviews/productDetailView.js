@@ -14,7 +14,9 @@ export function renderProductDetails(product) {
     <img src="${product.image}" alt="${product.title}" class="detail-image">
     <p>Kategooria: ${product.category}</p>
     <p>Hind: €${product.price.toFixed(2)}</p>
-    <p id="product-description">Kirjeldus: Väga kvaliteetne ${product.title}.</p>
+    <p id="product-description">Kirjeldus: Väga kvaliteetne ${
+      product.title
+    }.</p>
 
     <div class="detail-buttons">
       <button id="back-button">Tagasi</button>
@@ -23,22 +25,19 @@ export function renderProductDetails(product) {
     </div>
   `;
 
-  
   details.querySelector("#back-button").addEventListener("click", () => {
     details.style.display = "none";
     list.style.display = "flex";
   });
 
- 
   details.querySelector(".add-to-cart").addEventListener("click", () => {
     cart.addProduct(product, 1);
     renderCart();
     console.log(`${product.title} lisatud ostukorvi.`);
   });
 
- 
   details.querySelector(".add-to-favorites").addEventListener("click", () => {
-    if (!favorites.some(fav => fav.id === product.id)) {
+    if (!favorites.some((fav) => fav.id === product.id)) {
       favorites.push(product);
       renderFavorites();
       console.log(`${product.title} lisatud lemmikutesse.`);
