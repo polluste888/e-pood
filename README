@@ -1,0 +1,17 @@
+Selles projekti tegin täisfunktsionaalse e-poe kasutajaliidese ja loogika
+
+Ostukorvi sisu ja kliendi andmed säiliksid ka pärast lehe värskendamist.
+
+Kasutasin fetch meetodit toodete, kategooriate ja kliendiandmete laadimiseks välisest serverist.
+
+Lemmiktooted salvestatakse serverisse, kasutades asünkroonseid POST ja DELETE päringuid.
+
+Tegin Cart klassi, mis arvutab automaatselt summasid (neto, KM, kokku) ja haldab toodete koguseid.
+
+Interaktiivsed nupud, mis pole basic nupud vaid tegin nad ilusaks nagu ülejäänud pood.
+
+Tegin lehe reageerivuse erinevatele ekraanidele.
+
+E-pood kasutab node.js versiooni v20.11.0
+
+Terminali kirjutan node server.js,sealt saan http://localhost:5000 millele clickides saab minna e-poodi.
