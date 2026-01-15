@@ -1,46 +1,63 @@
-import { cart, favorites } from "../main.js";
-import { renderCart } from "./cartView.js";
-import { renderFavorites } from "./favoritesView.js";
+import { cart, favorites, updateCartBadge, toggleFavorite } from "../main.js";
 
 export function renderProductDetails(product) {
   const list = document.querySelector("#product-list");
+  const filters = document.querySelector("#category-filters");
   const details = document.querySelector("#product-details");
 
-  list.style.display = "none";
+ 
+  if (list) list.style.display = "none";
+  if (filters) filters.style.display = "none";
   details.style.display = "block";
 
+  
   details.innerHTML = `
-    <h2>${product.title}</h2>
-    <img src="${product.image}" alt="${product.title}" class="detail-image">
-    <p>Kategooria: ${product.category}</p>
-    <p>Hind: €${product.price.toFixed(2)}</p>
-    <p id="product-description">Kirjeldus: Väga kvaliteetne ${
-      product.title
-    }.</p>
+    <div class="product-details-content">
+      <button id="back-button" class="filter-btn">← Tagasi</button>
+      
+      <div class="details-layout">
+        <div class="details-image-container">
+          <img src="${product.image}" alt="${product.title}" class="detail-image">
+        </div>
+        
+        <div class="details-info">
+          <h2>${product.title}</h2>
+          <span class="category-tag">${product.category}</span>
+          <p class="price-large">€${product.price.toFixed(2)}</p>
+          
+          <div class="description-box">
+            <h4>Toote kirjeldus</h4>
+            <p>${product.description || 'Kirjeldus puudub.'}</p>
+          </div>
 
-    <div class="detail-buttons">
-      <button id="back-button">Tagasi</button>
-      <button class="add-to-cart">Lisa korvi</button>
-      <button class="add-to-favorites">Lisa lemmikutesse</button>
+          <div class="detail-buttons">
+            <button class="add-to-cart" id="detail-add-cart">Lisa korvi</button>
+            <button class="add-to-favorites" id="detail-add-fav">
+              ${favorites.some((f) => f.id === product.id) ? "❤️ Lemmikutes" : "🤍 Lisa lemmikuks"}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
+  
+
   details.querySelector("#back-button").addEventListener("click", () => {
     details.style.display = "none";
-    list.style.display = "flex";
+    if (list) list.style.display = "flex";
+    if (filters) filters.style.display = "flex";
   });
 
-  details.querySelector(".add-to-cart").addEventListener("click", () => {
+  
+  details.querySelector("#detail-add-cart").addEventListener("click", () => {
     cart.addProduct(product, 1);
-    renderCart();
-    console.log(`${product.title} lisatud ostukorvi.`);
+    updateCartBadge(); 
   });
 
-  details.querySelector(".add-to-favorites").addEventListener("click", () => {
-    if (!favorites.some((fav) => fav.id === product.id)) {
-      favorites.push(product);
-      renderFavorites();
-      console.log(`${product.title} lisatud lemmikutesse.`);
-    }
+  
+  details.querySelector("#detail-add-fav").addEventListener("click", async () => {
+    await toggleFavorite(product);
+    renderProductDetails(product); 
   });
 }

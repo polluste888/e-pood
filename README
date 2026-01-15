@@ -1,8 +1,9 @@
+
 Selles projekti tegin täisfunktsionaalse e-poe kasutajaliidese ja loogika
 
 Kasutasin request ja response meetodit.
 
-Ostukorvi sisu ja kliendi andmed säiliksid ka pärast lehe värskendamist.
+Ostukorvi sisu ja kliendi andmed säiliksid ka pärast lehe värskendamist, kasutades Data.json-i.
 
 Kasutasin fetch meetodit toodete, kategooriate ja kliendiandmete laadimiseks välisest serverist.
 
@@ -14,6 +15,8 @@ Interaktiivsed nupud, mis pole basic nupud vaid tegin nad ilusaks nagu ülejää
 
 Tegin lehe reageerivuse erinevatele ekraanidele.
 
-E-pood kasutab node.js versiooni v20.11.0
+E-pood kasutab node.js versiooni v24.11.0 ja express versiooni ^5.2.1 .
 
 Terminali kirjutan node server.js,sealt saan http://localhost:5000 millele clickides saab minna e-poodi.
+
+----------------------------------------------------------------------------------------------------------------------------------------

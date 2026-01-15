@@ -359,3 +359,153 @@ h2 {
   box-shadow: 0 4px 12px rgba(255, 65, 108, 0.3);
   border-color: transparent;
 }
+/* --- TOOTE DETAILVAATE PAIGUTUS --- */
+.product-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.details-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.details-image-container {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.detail-image {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.detail-image:hover {
+  transform: scale(1.02);
+}
+
+.details-info {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.details-info h2 {
+  text-align: left; /* Detailvaates joonda tekst vasakule */
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.price-large {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a00e0;
+  margin: 10px 0;
+}
+
+.description-box {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #4a00e0;
+}
+
+.description-box h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.detail-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Mobiilivaade detailidele */
+@media (max-width: 768px) {
+  .details-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .details-info h2 {
+    text-align: center;
+  }
+}
+
+footer {
+  background: linear-gradient(135deg, #2c3e50, #4a00e0); /* Tumedam gradient */
+  color: #fff;
+  padding: 40px 20px 20px;
+  margin-top: 50px;
+  border-radius: 16px 16px 0 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.footer-section a:hover {
+  opacity: 1;
+  padding-left: 5px;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1;
+}
