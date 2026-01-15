@@ -1,5 +1,7 @@
 Selles projekti tegin täisfunktsionaalse e-poe kasutajaliidese ja loogika
 
+Kasutasin request ja response meetodit.
+
 Ostukorvi sisu ja kliendi andmed säiliksid ka pärast lehe värskendamist.
 
 Kasutasin fetch meetodit toodete, kategooriate ja kliendiandmete laadimiseks välisest serverist.
