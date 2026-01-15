@@ -22,6 +22,7 @@ export {
   toggleFavorite,
   clearCart,
   confirmOrder,
+  handleRouting 
 };
 
 let products = [];
@@ -29,12 +30,56 @@ let customer = { name: "Klient" };
 const cart = new Cart();
 let favorites = [];
 
+
 const savedCart = localStorage.getItem("shopping-cart");
 if (savedCart) {
   const parsed = JSON.parse(savedCart);
-
   cart.items = parsed.items || [];
 }
+
+
+function handleRouting() {
+  const hash = window.location.hash.replace("#", "") || "home";
+  const hero = document.querySelector("#hero-section");
+
+  
+  if (hash === "home") {
+    if (hero) hero.style.display = "flex"; 
+    renderProducts(products);
+  } else {
+    if (hero) hero.style.display = "none"; 
+    
+    if (hash === "cart") {
+      renderCart();
+    } else if (hash === "favorites") {
+      hideAllViews();
+      document.querySelector("#favorites-view").style.display = "block";
+      renderFavorites();
+    } else if (hash.startsWith("product/")) {
+      const productId = parseInt(hash.split("/")[1]);
+      const product = products.find(p => p.id === productId);
+      if (product) renderProductDetails(product);
+    }
+  }
+}
+window.addEventListener("hashchange", handleRouting);
+
+
+document.querySelector("#search-input").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  
+ 
+  if (window.location.hash !== "#home" && window.location.hash !== "") {
+    window.location.hash = "home";
+  }
+
+  const filtered = products.filter(p => 
+    p.title.toLowerCase().includes(query) || 
+    p.category.toLowerCase().includes(query)
+  );
+
+  renderProducts(filtered);
+});
 
 function setTitle(text) {
   const el = document.querySelector("#page-title");
@@ -106,15 +151,23 @@ function renderProducts(itemsToRender = null) {
     const card = document.createElement("div");
     card.className = "product-card";
 
+    
     const img = document.createElement("img");
     img.src = p.image;
     img.className = "product-image";
     img.alt = p.title;
+    img.style.cursor = "pointer";
+    img.addEventListener("click", () => {
+        window.location.hash = `product/${p.id}`;
+    });
 
     const title = document.createElement("h3");
     title.className = "product-title";
     title.textContent = p.title;
-    title.addEventListener("click", () => renderProductDetails(p));
+    title.style.cursor = "pointer";
+    title.addEventListener("click", () => {
+        window.location.hash = `product/${p.id}`;
+    });
 
     const price = document.createElement("p");
     price.textContent = `Hind: €${p.price.toFixed(2)}`;
@@ -162,7 +215,7 @@ function renderCart() {
       <span>${item.product.title}</span>
       <input type="number" min="1" value="${item.qty}" class="cart-qty">
       <span>€${(item.product.price * item.qty).toFixed(2)}</span>
-      <button class="remove-item">❌</button>
+      <button class="remove-item">✕</button>
     `;
 
     row.querySelector(".cart-qty").addEventListener("change", (e) => {
@@ -200,14 +253,15 @@ function renderCart() {
   container.appendChild(summary);
 }
 
-document
-  .querySelector("#nav-home")
-  .addEventListener("click", () => renderProducts(products));
-document.querySelector("#nav-cart").addEventListener("click", renderCart);
+ 
+document.querySelector("#nav-home").addEventListener("click", () => {
+  window.location.hash = "home";
+});
+document.querySelector("#nav-cart").addEventListener("click", () => {
+  window.location.hash = "cart";
+});
 document.querySelector("#nav-favorites").addEventListener("click", () => {
-  hideAllViews();
-  document.querySelector("#favorites-view").style.display = "block";
-  renderFavorites();
+  window.location.hash = "favorites";
 });
 
 async function toggleFavorite(product) {
@@ -219,12 +273,11 @@ async function toggleFavorite(product) {
     favorites = await RemoveFavorite(product.id);
   }
 
-  const isFavView =
-    document.querySelector("#favorites-view").style.display === "block";
-  if (isFavView) {
+  const hash = window.location.hash.replace("#", "");
+  if (hash === "favorites") {
     renderFavorites();
   } else {
-    renderProducts();
+    handleRouting(); 
   }
 }
 
@@ -237,7 +290,7 @@ function confirmOrder() {
   if (cart.items.length === 0) return alert("Ostukorv on tühi!");
   alert(`Tellimus kinnitatud! Aitäh, ${customer.name}!`);
   clearCart();
-  renderProducts(products);
+  window.location.hash = "home";
 }
 
 async function initApp() {
@@ -263,7 +316,9 @@ async function initApp() {
     }
 
     await renderCategoryFilters();
-    renderProducts(products);
+    
+    
+    handleRouting();
 
     updateCartBadge();
   } catch (err) {

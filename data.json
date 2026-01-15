@@ -125,5 +125,14 @@
     "name": "E-poe Kasutaja",
     "email": "klienditugi@e-pood.ee"
   },
-  "favorites": []
+  "favorites": [
+    {
+      "id": 1,
+      "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+      "price": 109.95,
+      "category": "Meeste riided",
+      "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+      "description": "Teie ideaalne kandja igapäevaseks kasutuseks ja metsas jalutamiseks. Hoidke oma arvutit (kuni 15 tolli) kõrgendatud rõngas, teie igapäevased vajadused"
+    }
+  ]
 }

@@ -9,14 +9,32 @@ Kasutasin fetch meetodit toodete, kategooriate ja kliendiandmete laadimiseks vä
 
 Lemmiktooted salvestatakse serverisse, kasutades asünkroonseid POST ja DELETE päringuid.
 
+minu e-poes asünkroonsus: async, function, initApp, await, Promise, Promise.all.
+
 Tegin Cart klassi, mis arvutab automaatselt summasid (neto, KM, kokku) ja haldab toodete koguseid.
 
 Interaktiivsed nupud, mis pole basic nupud vaid tegin nad ilusaks nagu ülejäänud pood.
 
-Tegin lehe reageerivuse erinevatele ekraanidele.
+Tegin lehe erinevatele ekraanidele kasutuskõlblikuks.
 
 E-pood kasutab node.js versiooni v24.11.0 ja express versiooni ^5.2.1 .
 
 Terminali kirjutan node server.js,sealt saan http://localhost:5000 millele clickides saab minna e-poodi.
 
+lisasin searchbari toodetele,mis kasutab .filter() meetodit.
+
+lisasin ka, et peale ostu sooritamist viib leht sind tagasi avalehele, kasutades hanldeRoutingut.
+
+lisasin hero sektsiooni, mis on ilus vaadata ja kutsuv. muutsin html,css ja main.js-is handleRouting funktsiooni.
+
 ----------------------------------------------------------------------------------------------------------------------------------------
+
+andmete liikumine: 
+
+toodete nimekiri-  serveris     FetchProducts abil.
+ostukorv-   LocalStrorage-s    JSON.stringify abil.
+lemmikud-    serveris ja brauseris     AddFavorite ja RemoveFavorite abil.
+kliendi info-    serveris ja brauseris     localStorage.setItem ja localStorage.getItem abil.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
