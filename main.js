@@ -1,17 +1,24 @@
 import { FetchProducts } from "./api.js";
-import { products, favorites, cart, stateActions } from "./state.js";
+import { products, favorites, cart, stateActions, currentUserId } from "./state.js";
 import { renderProducts } from "./Allviews/allProductsView.js";
 import { renderCart } from "./Allviews/cartView.js";
+import { renderProductDetails } from "./Allviews/productDetailView.js";
 
 async function initApp() {
+    console.log("Sessiooni ID:", currentUserId);
 
-    // 2. Andmete laadimine serverist
-    const data = await FetchProducts();
-    stateActions.setProducts(data);
-    
-    // 3. Keskne värskendamise loogika
-    const refreshUI = () => { 
-        handleRouting(); 
+    // 1. ANDMETE LAADIMINE
+    try {
+        const data = await FetchProducts();
+        stateActions.setProducts(data); 
+        stateActions.loadFavorites(); 
+    } catch (err) {
+        console.error("Viga andmete laadimisel:", err);
+    }
+
+    // 2. UI VÄRSKENDAMISE ABIFUNKTSIOONID
+    const refreshUI = (shouldScroll = true) => { 
+        handleRouting(shouldScroll); 
         stateActions.updateBadge(); 
     };
 
@@ -22,72 +29,102 @@ async function initApp() {
     
     const onFavAction = (p) => { 
         stateActions.toggleFav(p); 
-        refreshUI(); 
+        refreshUI(false); 
     };
 
-    // 4. NAVIGATSIOON (Logo ja ikoonid)
-    const setupNav = () => {
-        const logo = document.querySelector(".header-logo img") || document.querySelector("header img");
-        const navHome = document.querySelector(".fa-home")?.parentElement;
-        const navFavs = document.querySelector(".fa-heart")?.parentElement;
-        const navCart = document.querySelector(".fa-shopping-cart")?.parentElement;
+    // 3. NAVIGATSIOON
+    const homeBtn = document.querySelector(".fa-home")?.closest("a") || document.querySelector(".fa-home");
+    const favsBtn = document.querySelector(".fa-heart")?.closest("a") || document.querySelector(".fa-heart");
+    const cartBtn = document.querySelector(".fa-shopping-cart")?.closest("a") || document.querySelector(".fa-shopping-cart");
 
-        if (logo) logo.onclick = () => window.location.hash = "#home";
-        if (navHome) navHome.onclick = () => window.location.hash = "#home";
-        if (navFavs) navFavs.onclick = () => window.location.hash = "#favorites";
-        if (navCart) navCart.onclick = () => window.location.hash = "#cart";
-    };
+    if (homeBtn) homeBtn.onclick = (e) => { e.preventDefault(); window.location.hash = "#home"; };
+    if (favsBtn) favsBtn.onclick = (e) => { e.preventDefault(); window.location.hash = "#favorites"; };
+    if (cartBtn) cartBtn.onclick = (e) => { e.preventDefault(); window.location.hash = "#cart"; };
 
-    // 5. OTSING
-    const setupSearch = () => {
-        const searchInput = document.querySelector("#search-input");
-        if (searchInput) {
-            searchInput.oninput = (e) => {
-                const term = e.target.value.toLowerCase();
-                const filtered = products.filter(p => 
-                    p.title.toLowerCase().includes(term) || 
-                    p.category.toLowerCase().includes(term)
-                );
-                const container = document.querySelector("#product-list");
-                if (container) {
-                    container.innerHTML = "";
-                    renderProducts(filtered, favorites, onCartAction, onFavAction);
-                }
+    // 4. OTSINGU LOOGIKA
+    const searchInput = document.querySelector("#search-input");
+    if (searchInput) {
+        searchInput.oninput = (e) => {
+            const term = e.target.value.toLowerCase();
+            if (window.location.hash !== "" && window.location.hash !== "#home") {
+                window.location.hash = "#home";
+            }
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(term) || 
+                p.category.toLowerCase().includes(term)
+            );
+            const container = document.querySelector("#product-list");
+            if (container) {
+                container.innerHTML = "";
+                renderProducts(filtered, favorites, onCartAction, onFavAction);
+            }
+        };
+    }
+
+    // 5. KATEGOORIA FILTRID
+    const setupFilters = () => {
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.onclick = () => {
+                const cat = btn.getAttribute("data-category");
+                stateActions.setCategory(cat);
+                window.location.hash = "#home";
+                if (searchInput) searchInput.value = "";
+                refreshUI(true);
             };
-        }
+        });
     };
 
-    // 6. ROUTING (Vaadete vahetamine)
-    const handleRouting = () => {
+    // 6. MARSRUUTIMINE (Routing)
+    const handleRouting = (shouldScroll = true) => {
         const hash = window.location.hash;
         const container = document.querySelector("#product-list");
+        const filters = document.querySelector("#category-filters");
         
-        if (container) container.innerHTML = "";
+        if (!container) return;
+        container.innerHTML = "";
 
-        // Kontrollime hashi ja kuvame vastava vaate
+        // Filtrite haldus
+        if (filters) {
+            const isHome = hash === "" || hash === "#home";
+            filters.style.display = isHome ? "flex" : "none";
+            if (isHome) {
+                const currentCat = localStorage.getItem("selectedCategory") || "all";
+                filters.querySelectorAll(".filter-btn").forEach(btn => {
+                    btn.classList.toggle("active", btn.getAttribute("data-category") === currentCat);
+                });
+            }
+        }
+
+        // Vaadete joonistamine
         if (hash === "#cart") {
-            renderCart(cart, refreshUI);
+    renderCart(cart, () => {
+        refreshUI(false); // See kutsub updateBadge() ja handleRouting()
+    });
+    
         } else if (hash === "#favorites") {
             renderProducts(favorites, favorites, onCartAction, onFavAction);
-        } else if (hash === "#login") {
-            renderLogin(); // Kutsub esile Allviews/loginView.js loogika
+        } else if (hash.startsWith("#product/")) {
+            const productId = hash.split("/")[1];
+            const product = products.find(p => p.id == productId);
+            if (product) renderProductDetails(product, favorites, onCartAction, onFavAction);
         } else {
-            renderProducts(products, favorites, onCartAction, onFavAction);
+            const currentCat = localStorage.getItem("selectedCategory") || "all";
+            const filtered = currentCat === "all" 
+                ? products 
+                : products.filter(p => p.category.toLowerCase() === currentCat.toLowerCase());
+            
+            renderProducts(filtered, favorites, onCartAction, onFavAction);
         }
-        
+
+        if (shouldScroll) window.scrollTo(0, 0);
     };
 
-    // KÄIVITAMINE
-    setupNav();
-    setupSearch();
+    // 7. KÄIVITAMINE
+    setupFilters();
+    window.addEventListener("hashchange", () => handleRouting(true));
     
-    // Kuulame hashi muutust
-    window.addEventListener("hashchange", handleRouting);
-    
-    // Esimene laadimine
-    handleRouting(); 
+    handleRouting(true); 
     stateActions.updateBadge();
 }
 
-// Rakenduse start
 initApp();
