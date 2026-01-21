@@ -1,28 +1,29 @@
 import { stateActions, cart } from "../state.js";
 
 export function renderCart(cartObj, onUpdate) {
-    const container = document.querySelector("#product-list");
-    if (!container) return;
+  const container = document.querySelector("#product-list");
+  if (!container) return;
 
-    container.innerHTML = `<h1 class="view-title">Sinu ostukorv</h1>`;
+  container.innerHTML = `<h1 class="view-title">Sinu ostukorv</h1>`;
 
-    // 1. Kontroll, kas ostukorv on tühi
-    if (!cartObj.items || cartObj.items.length === 0) {
-        container.innerHTML += `<p style="text-align:center; font-size:1.2rem; margin-top:20px;">Ostukorv on tühi.</p>`;
-        // Uuendame badge'i isegi kui korv on tühi
-        stateActions.updateBadge();
-        return;
-    }
+  // 1. Kontroll, kas ostukorv on tühi
+  if (!cartObj.items || cartObj.items.length === 0) {
+    container.innerHTML += `<p style="text-align:center; font-size:1.2rem; margin-top:20px;">Ostukorv on tühi.</p>`;
 
-    const cartTable = document.createElement("div");
-    cartTable.className = "cart-container";
+    stateActions.updateBadge();
+    return;
+  }
 
-    cartObj.items.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "cart-row"; 
-        row.style.cssText = "display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid #eee; background: white;";
+  const cartTable = document.createElement("div");
+  cartTable.className = "cart-container";
 
-        row.innerHTML = `
+  cartObj.items.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "cart-row";
+    row.style.cssText =
+      "display: flex; align-items: center; gap: 20px; padding: 15px; border-bottom: 1px solid #eee; background: white;";
+
+    row.innerHTML = `
             <img src="${item.image}" style="width: 60px; height: 60px; object-fit: contain;">
             <div style="flex: 1;">
                 <h4 style="margin: 0;">${item.title}</h4>
@@ -44,38 +45,38 @@ export function renderCart(cartObj, onUpdate) {
             </div>
         `;
 
-        // --- SÜNDMUSTE SIDUMINE ---
+    // --- SÜNDMUSTE SIDUMINE ---
 
-        // Miinus nupp
-        row.querySelector(".minus").onclick = (e) => {
-            e.preventDefault();
-            cart.updateQuantity(item.id, -1);
-            onUpdate(); // See värskendab vaadet ja badge'i
-        };
+    // Miinus nupp
+    row.querySelector(".minus").onclick = (e) => {
+      e.preventDefault();
+      cart.updateQuantity(item.id, -1);
+      onUpdate();
+    };
 
-        // Pluss nupp
-        row.querySelector(".plus").onclick = (e) => {
-            e.preventDefault();
-            cart.updateQuantity(item.id, 1);
-            onUpdate();
-        };
+    // Pluss nupp
+    row.querySelector(".plus").onclick = (e) => {
+      e.preventDefault();
+      cart.updateQuantity(item.id, 1);
+      onUpdate();
+    };
 
-        // Eemaldamise nupp (X märk)
-        row.querySelector(".remove-item").onclick = (e) => {
-            e.preventDefault();
-            cart.removeProduct(item.id);
-            onUpdate(); 
-        };
+    // Eemaldamise nupp (X märk)
+    row.querySelector(".remove-item").onclick = (e) => {
+      e.preventDefault();
+      cart.removeProduct(item.id);
+      onUpdate();
+    };
 
-        cartTable.appendChild(row);
-    });
+    cartTable.appendChild(row);
+  });
 
-    // Jalus (Summad ja Kinnitamine)
-    const subtotal = cart.getTotal();
-    const total = subtotal * 1.2;
+  //(Summad ja Kinnitamine)
+  const subtotal = cart.getTotal();
+  const total = subtotal * 1.2;
 
-    const totalDiv = document.createElement("div");
-    totalDiv.innerHTML = `
+  const totalDiv = document.createElement("div");
+  totalDiv.innerHTML = `
         <div style="text-align: right; margin-top: 20px; padding: 25px; background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
             <p style="margin: 5px 0;">Vahesumma: €${subtotal.toFixed(2)}</p>
             <p style="margin: 5px 0; opacity: 0.7;">KM (20%): €${(subtotal * 0.2).toFixed(2)}</p>
@@ -86,15 +87,15 @@ export function renderCart(cartObj, onUpdate) {
         </div>
     `;
 
-    container.appendChild(cartTable);
-    container.appendChild(totalDiv);
+  container.appendChild(cartTable);
+  container.appendChild(totalDiv);
 
-    // Ostu kinnitamise nupp
-    const checkoutBtn = totalDiv.querySelector("#checkout-btn");
-    checkoutBtn.onclick = () => {
-        if (stateActions.checkout()) {
-            window.location.hash = "#home";
-            onUpdate();
-        }
-    };
+  // Ostu kinnitamise nupp
+  const checkoutBtn = totalDiv.querySelector("#checkout-btn");
+  checkoutBtn.onclick = () => {
+    if (stateActions.checkout()) {
+      window.location.hash = "#home";
+      onUpdate();
+    }
+  };
 }

@@ -1,75 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="et">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <title>E‑Pood</title>
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <title>E-Pood</title>
+  </head>
+  <body>
     <header>
-        <h1 id="nav-logo" style="cursor: pointer;"><img src="mark.jpg" alt="Logo" /></h1>
-        
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Otsi tooteid..." />
-            
-        </div>
+      <h1 id="nav-logo" style="cursor: pointer">
+        <img
+          src="mark.jpg"
+          alt="Logo"
+          style="height: 40px; vertical-align: middle"
+        />
+      </h1>
 
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Otsi tooteid..." />
+      </div>
 
-        <nav>
-            <ul>
-                <li><a id="nav-home" title="Kodu"><i class="fas fa-home"></i></a></li>
-                <li><a id="nav-favorites" title="Lemmikud"><i class="fas fa-heart"></i></a></li>
-                <li>
-                    <a id="nav-cart" title="Ostukorv">
-                        <i class="fas fa-shopping-cart"></i>
-                        
-                    </a>
-                </li>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <li>
+            <a href="#home" title="Kodu"><i class="fas fa-home"></i></a>
+          </li>
+          <li>
+            <a href="#favorites" title="Lemmikud"
+              ><i class="fas fa-heart"></i
+            ></a>
+          </li>
+          <li>
+            <a href="#cart" title="Ostukorv" class="cart-icon-container">
+              <i class="fas fa-shopping-cart"></i>
+              <span id="cart-badge" class="badge">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <main>
+      <h2 id="page-title">Kõik tooted</h2>
 
-        <h2 id="page-title">Kõik tooted</h2>
-        <div id="category-filters">
-    <button class="filter-btn" data-category="all">Kõik</button>
-    <button class="filter-btn" data-category="Elektroonika">Elektroonika</button>
-    <button class="filter-btn" data-category="akessuaarid">Ehted</button>
-    <button class="filter-btn" data-category="Meeste riided">Mehed</button>
-</div>
-        <div id="product-list"></div>
-        <div id="product-details" style="display: none"></div>
-        <div id="cart-view" style="display: none"></div>
-        <div id="favorites-view" style="display: none"></div>
+      <div id="category-filters">
+        <button class="filter-btn active" data-category="all">Kõik</button>
+        <button class="filter-btn" data-category="Elektroonika">
+          Elektroonika
+        </button>
+        <button class="filter-btn" data-category="akessuaarid">Ehted</button>
+        <button class="filter-btn" data-category="Meeste riided">Mehed</button>
+      </div>
+
+      <div id="product-list"></div>
     </main>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Minu E-pood</h4>
-                <p>Parimad tooted parima hinnaga.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Lingid</h4>
-                <ul>
-                    <li><a href="#" id="footer-home">Kodu</a></li>
-                    <li><a href="#" id="footer-cart">Ostukorv</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Kontakt</h4>
-                <p>E-mail: info@epood.ee</p>
-                <p>Tel: +372 555 0000</p>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Minu E-pood</h4>
+          <p>Parimad tooted parima hinnaga.</p>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 Minu E-pood. Kõik õigused kaitstud.
+        <div class="footer-section"></div>
+        <div class="footer-section">
+          <h4>Kontakt</h4>
+          <p>E-mail: info@epood.ee</p>
+          <p>Tel: +372 555 0000</p>
         </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Minu E-pood. Kõik õigused kaitstud.
+      </div>
     </footer>
 
     <script type="module" src="main.js"></script>
-</body>
+  </body>
 </html>

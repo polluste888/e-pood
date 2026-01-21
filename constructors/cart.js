@@ -22,7 +22,7 @@ export class Cart {
   removeProduct(productId) {
     this.items = this.items.filter((i) => i.product.id !== productId);
   }
-// Lisa see meetod oma klassi (removeProduct ja clear vahele või lõppu)
+
   getTotalPrice() {
     return this.calculateTotals().total;
   }
@@ -33,7 +33,7 @@ export class Cart {
   calculateTotals() {
     const subtotal = this.items.reduce(
       (sum, i) => sum + i.product.price * i.qty,
-      0
+      0,
     );
     const vat = subtotal * 0.2;
     const total = subtotal + vat;

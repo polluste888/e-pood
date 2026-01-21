@@ -28,7 +28,7 @@ export class Customer {
       console.log(
         `${
           index + 1
-        }. Kuupäev: ${order.orderDate.toLocaleString()} | Summa: ${order.cart.calculateTotal()} €`
+        }. Kuupäev: ${order.orderDate.toLocaleString()} | Summa: ${order.cart.calculateTotal()} €`,
       );
     });
   }

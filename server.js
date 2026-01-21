@@ -35,7 +35,7 @@ app.get("/api/categories", (req, res) => {
 app.get("/api/products/category/:categoryName", (req, res) => {
   const data = getShopData();
   const filtered = data.products.filter(
-    (p) => p.category.toLowerCase() === req.params.categoryName.toLowerCase()
+    (p) => p.category.toLowerCase() === req.params.categoryName.toLowerCase(),
   );
   res.json(filtered);
 });

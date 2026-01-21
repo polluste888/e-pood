@@ -1,13 +1,13 @@
 import { cart, favorites, stateActions } from "../state.js";
 
 export function renderProductDetails(product) {
-    const container = document.querySelector("#product-list");
-    const filters = document.querySelector("#category-filters");
-    const count = product.rating?.count ?? 0; // Võtame laoseisu
+  const container = document.querySelector("#product-list");
+  const filters = document.querySelector("#category-filters");
+  const count = product.rating?.count ?? 0;
 
-    if (filters) filters.style.display = "none";
+  if (filters) filters.style.display = "none";
 
-    container.innerHTML = `
+  container.innerHTML = `
         <div class="product-details-content">
             <button id="back-button" class="back-link" style="cursor:pointer; margin-bottom: 20px; background:none; border:none; font-size:1.1rem; color:#4a00e0;">
                 ← Tagasi tootenimekirja
@@ -26,9 +26,9 @@ export function renderProductDetails(product) {
                     
                     <div class="description-box" style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;">
                         <h4 style="margin-bottom: 10px; color: #444;">Toote kirjeldus</h4>
-                        <p style="line-height: 1.6; color: #555;">${product.description || 'Kirjeldus puudub.'}</p>
-                        <p style="font-weight: bold; color: ${count <= 0 ? 'red' : '#444'}">
-                            Lao seis: ${count > 0 ? count + ' tk' : 'LÄBI MÜÜDUD'}
+                        <p style="line-height: 1.6; color: #555;">${product.description || "Kirjeldus puudub."}</p>
+                        <p style="font-weight: bold; color: ${count <= 0 ? "red" : "#444"}">
+                            Lao seis: ${count > 0 ? count + " tk" : "LÄBI MÜÜDUD"}
                         </p>
                     </div>
 
@@ -50,30 +50,30 @@ export function renderProductDetails(product) {
         </div>
     `;
 
-    // TAGASI NUPP
-    document.querySelector("#back-button").onclick = () => {
-        window.location.hash = "#home";
-    };
+  // TAGASI NUPP
+  document.querySelector("#back-button").onclick = () => {
+    window.location.hash = "#home";
+  };
 
-    // LISA OSTUKORVI
-    const cartBtn = document.querySelector("#detail-add-cart");
-    if (cartBtn && count > 0) {
-        cartBtn.onclick = () => {
-            cart.addProduct(product, 1);
-            stateActions.updateBadge();
-            
-            cartBtn.innerText = "✅ Lisatud!";
-            cartBtn.style.background = "#28a745";
-            setTimeout(() => {
-                cartBtn.innerText = "Lisa ostukorvi";
-                cartBtn.style.background = "#4a00e0";
-            }, 1500);
-        };
-    }
+  // LISA OSTUKORVI
+  const cartBtn = document.querySelector("#detail-add-cart");
+  if (cartBtn && count > 0) {
+    cartBtn.onclick = () => {
+      cart.addProduct(product, 1);
+      stateActions.updateBadge();
 
-    // LEMMIKUD
-    document.querySelector("#detail-add-fav").onclick = () => {
-        stateActions.toggleFav(product);
-        renderProductDetails(product); 
+      cartBtn.innerText = "✅ Lisatud!";
+      cartBtn.style.background = "#28a745";
+      setTimeout(() => {
+        cartBtn.innerText = "Lisa ostukorvi";
+        cartBtn.style.background = "#4a00e0";
+      }, 1500);
     };
+  }
+
+  // LEMMIKUD
+  document.querySelector("#detail-add-fav").onclick = () => {
+    stateActions.toggleFav(product);
+    renderProductDetails(product);
+  };
 }

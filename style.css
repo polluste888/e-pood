@@ -1,318 +1,272 @@
 /* 1. ÜLDISED STIILID */
-body, h1, ul {
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+* {
+    box-sizing: border-box;
 }
 
-h2, .view-title {
-  text-align: center;
-  margin: 30px 0;
-  color: #333;
-  font-size: 2rem;
-  font-weight: 600;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f4f7f6;
+    line-height: 1.6;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+h2 {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 2rem;
+    font-weight: 600;
 }
 
-/* 2. PÄIS (HEADER) JA NAVIGATSIOON */
+/* 2. PÄIS (HEADER) */
 header {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  background: linear-gradient(135deg, #8e2de2, #4a00e0);
-  color: #fff;
-  padding: 0.5rem 2rem; 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  gap: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color: #fff;
+    padding: 0.8rem 5%; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-header img {
-  width: 80px; 
-  height: auto; 
-  cursor: pointer;
+#nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+#nav-logo img {
+    height: 45px;
+    width: auto;
 }
 
 .search-container {
-  position: relative;
-  flex: 2;
-  max-width: 300px;
+    flex: 1;
+    max-width: 400px;
+    margin: 0 20px;
 }
 
 #search-input {
-  padding: 10px 15px 10px 40px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 100%;
-  outline: none;
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.15); 
-  color: white;
-  transition: all 0.3s ease;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    width: 100%;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: 0.3s;
 }
+
+#search-input::placeholder { color: rgba(255, 255, 255, 0.7); }
 
 #search-input:focus {
-  background: white;
-  color: #333;
+    background: white;
+    color: #333;
 }
 
+/* NAVIGATSIOON JA BADGE */
 nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 nav a {
-  text-decoration: none;
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: white;
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.3rem;
+    position: relative;
+    transition: 0.3s;
 }
 
-#cart-count {
-  position: absolute;
-  top: -10px; 
-  right: -5px;
-  background: #ff4b2b;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.75rem;
+nav a:hover { opacity: 0.8; }
+
+.cart-icon-container {
+    position: relative;
 }
 
-/* 3. TOODETE LIST JA KAARDID */
+.badge {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background: #ff4b2b;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    min-width: 18px;
+    text-align: center;
+    display: none; 
+}
+
+/* 3. TOODETE KONTEINER JA KAARDID */
 #product-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-  padding: 40px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .product-card {
     background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    padding: 15px; 
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 20px;
     width: 280px;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    
-    transition: transform 0.3s ease;
-    
-    min-height: 450px; 
-    height: auto; 
+    transition: 0.3s;
 }
+
+.product-card:hover { transform: translateY(-5px); }
 
 .product-image {
-    height: 150px; 
+    height: 180px;
     width: 100%;
     object-fit: contain;
-    margin-bottom: 10px;
-}
-.product-title {
-    font-size: 1rem;
-    margin: 10px 0;
-    line-height: 1.1;
-  
-    display: -webkit-box;
-    overflow: hidden;
-    height: 4rem; 
-}
-.product-card h3 {
-  font-size: 1.1rem;
-  height: 2.5rem;
-  overflow: hidden;
+    margin-bottom: 15px;
 }
 
-.add-to-cart, 
-.add-to-favorites {
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    height: 3rem;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.add-to-cart, .add-to-favorites {
     width: 100%;
-    padding: 10px; 
+    padding: 10px;
     border: none;
     border-radius: 8px;
-    font-weight: 600;
     cursor: pointer;
+    font-weight: bold;
     margin-top: 8px;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    transition: 0.2s;
 }
 
 .add-to-cart {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    background: #4a00e0;
     color: white;
 }
+
 .add-to-favorites {
-    background: linear-gradient(135deg, #f7971e, #ffd200);
-    color: white;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
 }
-
-.add-to-favorites:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(247, 151, 30, 0.3);
-    background: linear-gradient(135deg, #f9a825, #ffeb3b);
-}
-
 
 .add-to-favorites.red-style {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #ff4b2b;
+    border-color: #ff4b2b;
 }
 
-
-.add-to-favorites i {
-    font-size: 1rem;
+/* 4. FILTRID */
+#category-filters {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
-/* 4. OSTUKORVI VAADE */
+.filter-btn {
+    padding: 8px 20px;
+    border: 2px solid #4a00e0;
+    background: transparent;
+    color: #4a00e0;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+    background: #4a00e0;
+    color: white;
+}
+
+/* 5. OSTUKORVI KUJUNDUS */
 .cart-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .cart-row {
     display: flex;
-    flex-wrap: wrap; 
     align-items: center;
-    justify-content: space-between;
-    background: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-}
-.cart-thumb {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
+    gap: 20px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
 }
 
-.cart-info {
-  flex: 2;
-  padding: 0 20px;
-}
-
-.cart-subtotal {
-  font-weight: bold;
-  color: #4a00e0;
-}
-
-.remove-item {
-  background: transparent;
-  color: #ff4b2b; 
-  border: 2px solid #ff4b2b;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.remove-item:hover {
-  background: #ff4b2b;
-  color: #fff;
-}
-
-.cart-total-section {
-  text-align: right;
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  border-top: 2px solid #eee;
-}
-
-#btn-checkout {
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* 5. FILTRID */
-#category-filters {
-  display: flex;
-  gap: 12px;
-  margin: 20px 0;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 8px 18px;
-  cursor: pointer;
-  background: #fff;
-  color: #4a00e0; 
-  border: 2px solid #4a00e0;
-  border-radius: 50px;
-  font-weight: 600;
-}
-
-.filter-btn:hover {
-  background: #4a00e0;
-  color: #fff;
-}
-
-/* 6. FOOTER */
-footer {
-  background: linear-gradient(135deg, #2c3e50, #4a00e0); 
-  color: #fff;
-  padding: 40px 20px;
-  margin-top: 50px;
-  text-align: center;
-}
-/* 7. LOGI SISSE NUPU STIILIPARANDUS  */
-#nav-login {
-    background: rgba(255, 255, 255, 0.2); 
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 8px 22px;
-    border-radius: 50px; 
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(5px); 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    outline: none;
+    border-radius: 4px;
 }
 
-#nav-login:hover {
-    background: #ffffff;
-    color: #4a00e0; 
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    border-color: white;
+.checkout-btn {
+    background: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
 }
 
-#nav-login:active {
-    transform: translateY(0);
+/* 6. JALUS (FOOTER) */
+footer {
+    background: #2c3e50;
+    color: #fff;
+    padding: 40px 5%;
+    margin-top: 50px;
 }
-/* 8. RESPONSIIVSUS */
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h4 { margin-bottom: 15px; }
+.footer-section ul { list-style: none; padding: 0; }
+.footer-section a { color: #ccc; text-decoration: none; }
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 7. RESPONSIIVSUS */
 @media (max-width: 768px) {
-  .product-card { width: 45%; }
-}
-
-@media (max-width: 480px) {
-  .product-card { width: 100%; }
+    header { flex-direction: column; gap: 15px; }
+    .search-container { max-width: 100%; order: 3; }
+    .product-card { width: 100%; max-width: 350px; }
 }

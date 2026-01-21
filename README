@@ -25,7 +25,10 @@ lisasin searchbari toodetele,mis kasutab .filter() meetodit.
 
 lisasin ka, et peale ostu sooritamist viib leht sind tagasi avalehele, kasutades hanldeRoutingut.
 
-lisasin hero sektsiooni, mis on ilus vaadata ja kutsuv. muutsin html,css ja main.js-is handleRouting funktsiooni.
+lisasin toote lehele toote detailid, kasutades URLSearchParams-i.
+
+lisasin toodete lao süsteemi.
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 
