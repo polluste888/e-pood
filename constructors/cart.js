@@ -22,7 +22,10 @@ export class Cart {
   removeProduct(productId) {
     this.items = this.items.filter((i) => i.product.id !== productId);
   }
-
+// Lisa see meetod oma klassi (removeProduct ja clear vahele või lõppu)
+  getTotalPrice() {
+    return this.calculateTotals().total;
+  }
   clear() {
     this.items = [];
   }

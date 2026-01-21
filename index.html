@@ -1,81 +1,70 @@
 <!DOCTYPE html>
 <html lang="et">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <title>E‑Pood</title>
-  </head>
-  <body>
+</head>
+<body>
     <header>
-  <h1 id="nav-logo"><img src="mark.jpg" alt="Logo" /></h1>
-  
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="Otsi tooteid..." />
-    <i class="fas fa-search search-icon"></i>
-  </div>
-
-  <nav>
-    <ul>
-      <li><a id="nav-home" title="Kodu"><i class="fas fa-home"></i></a></li>
-      <li><a id="nav-favorites" title="Lemmikud"><i class="fas fa-heart"></i></a></li>
-      <li>
-        <a id="nav-cart" title="Ostukorv">
-          <i class="fas fa-shopping-cart"></i>
+        <h1 id="nav-logo" style="cursor: pointer;"><img src="mark.jpg" alt="Logo" /></h1>
         
-        </a>
-      </li>
-    </ul>
-  </nav>
-</header>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Otsi tooteid..." />
+            
+        </div>
+
+
+        <nav>
+            <ul>
+                <li><a id="nav-home" title="Kodu"><i class="fas fa-home"></i></a></li>
+                <li><a id="nav-favorites" title="Lemmikud"><i class="fas fa-heart"></i></a></li>
+                <li>
+                    <a id="nav-cart" title="Ostukorv">
+                        <i class="fas fa-shopping-cart"></i>
+                        
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
 
-  <div id="hero-section" class="hero">
-    <div class="hero-content">
-      <h1>Stiil ja Kvaliteet Ühes Kohas</h1>
-      <p>Avasta meie uusim tootevalik ja parimad pakkumised.</p>
-    </div>
-  </div>
-
-      <h2 id="page-title">Kõik tooted</h2>
-
-      <div id="category-filters"></div>
-
-      <div id="product-list"></div>
-      <div id="product-details" style="display: none"></div>
-      <div id="cart-view" style="display: none"></div>
-      <div id="favorites-view" style="display: none"></div>
+        <h2 id="page-title">Kõik tooted</h2>
+        <div id="category-filters"></div>
+        <div id="product-list"></div>
+        <div id="product-details" style="display: none"></div>
+        <div id="cart-view" style="display: none"></div>
+        <div id="favorites-view" style="display: none"></div>
     </main>
 
     <footer>
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>Minu E-pood</h4>
-          <p>Parimad tooted parima hinnaga.</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Minu E-pood</h4>
+                <p>Parimad tooted parima hinnaga.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Lingid</h4>
+                <ul>
+                    <li><a href="#" id="footer-home">Kodu</a></li>
+                    <li><a href="#" id="footer-cart">Ostukorv</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Kontakt</h4>
+                <p>E-mail: info@epood.ee</p>
+                <p>Tel: +372 555 0000</p>
+            </div>
         </div>
-        <div class="footer-section">
-          <h4>Lingid</h4>
-          <ul>
-            <li><a href="#" id="footer-home">Kodu</a></li>
-            <li><a href="#" id="footer-cart">Ostukorv</a></li>
-          </ul>
+        <div class="footer-bottom">
+            &copy; 2026 Minu E-pood. Kõik õigused kaitstud.
         </div>
-        <div class="footer-section">
-          <h4>Kontakt</h4>
-          <p>E-mail: info@epood.ee</p>
-          <p>Tel: +372 555 0000</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        &copy; 2026 Minu E-pood. Kõik õigused kaitstud.
-      </div>
     </footer>
 
     <script type="module" src="main.js"></script>
-  </body>
+</body>
 </html>

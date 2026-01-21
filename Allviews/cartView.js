@@ -1,59 +1,67 @@
-import { cart } from "../main.js";
+export function renderCart(cart, onUpdate) {
+    const container = document.querySelector("#product-list");
+    if (!container) return;
 
-export function renderCart() {
-  const container = document.querySelector("#cart-view");
-  container.innerHTML = "<h2>Ostukorv</h2>";
+    // Pealkiri kasutab nüüd CSS-is olevat gradient-stiili
+    container.innerHTML = `<h1 class="view-title">Sinu ostukorv</h1>`;
 
-  if (cart.items.length === 0) {
-    container.innerHTML += "<p>Ostukorv on tühi.</p>";
-    return;
-  }
+    if (cart.items.length === 0) {
+        container.innerHTML += `<p style="text-align:center; font-size:1.2rem; margin-top:20px;">Ostukorv on tühi.</p>`;
+        return;
+    }
 
-  cart.items.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "cart-item";
+    const cartTable = document.createElement("div");
+    cartTable.className = "cart-container";
 
-    div.innerHTML = `
-      <img src="${item.product.image}" alt="${
-      item.product.title
-    }" class="cart-image">
-      <p>${item.product.title}</p>
+    cart.items.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "cart-row"; // Vastab sinu CSS grid-süsteemile
+        row.innerHTML = `
+            <img src="${item.product.image}" class="cart-thumb">
+            <div class="cart-info">
+                <h4>${item.product.title}</h4>
+                <p>${item.qty} tk x €${item.product.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-subtotal">
+                €${(item.product.price * item.qty).toFixed(2)}
+            </div>
+            <div class="cart-actions">
+                <button class="remove-item">×</button>
+            </div>
+        `;
 
-      <div class="quantity-controls">
-        <button class="decrease">-</button>
-        <span>${item.quantity}</span>
-        <button class="increase">+</button>
-      </div>
+        // Eemaldamise nupp kasutab sinu CSS-i ümmargust .remove-item stiili
+        row.querySelector(".remove-item").onclick = () => {
+            cart.removeProduct(item.product.id);
+            onUpdate(); 
+        };
 
-      <button class="remove">Remove</button>
+        cartTable.appendChild(row);
+    });
 
-      <p>€${(item.product.price * item.quantity).toFixed(2)}</p>
+    // Jaluse osa koos kogusummaga
+    const totals = cart.calculateTotals(); // Kasutame sinu Cart klassi põhjalikku arvutust
+    const totalDiv = document.createElement("div");
+    totalDiv.className = "cart-total-section";
+    totalDiv.innerHTML = `
+        <div style="margin-bottom: 10px; opacity: 0.8;">
+            <p>Vahesumma: €${totals.subtotal.toFixed(2)}</p>
+            <p>KM (20%): €${totals.vat.toFixed(2)}</p>
+        </div>
+        <h2 style="margin: 0; color: #4a00e0;">Kokku: €${totals.total.toFixed(2)}</h2>
+        <button id="btn-checkout" style="margin-top: 20px;">Kinnita ost</button>
     `;
 
-    div.querySelector(".increase").addEventListener("click", () => {
-      item.quantity++;
-      renderCart();
-    });
+    container.appendChild(cartTable);
+    container.appendChild(totalDiv);
 
-    div.querySelector(".decrease").addEventListener("click", () => {
-      item.quantity--;
-      if (item.quantity <= 0) {
-        cart.removeProduct(item.product.id);
-      }
-      renderCart();
-    });
-
-    div.querySelector(".remove").addEventListener("click", () => {
-      cart.removeProduct(item.product.id);
-      renderCart();
-    });
-
-    container.appendChild(div);
-  });
-
-  const total = document.createElement("p");
-  total.innerHTML = `<strong>Kogusumma: €${cart
-    .calculateTotal()
-    .toFixed(2)}</strong>`;
-  container.appendChild(total);
+    // Lisa funktsionaalsus "Kinnita ost" nupule
+    const checkoutBtn = totalDiv.querySelector("#btn-checkout");
+    if (checkoutBtn) {
+        checkoutBtn.onclick = () => {
+            alert("Täname ostu eest! Sinu tellimus on vormistatud.");
+            cart.clear();
+            onUpdate();
+        };
+    }
 }

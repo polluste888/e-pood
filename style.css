@@ -1,12 +1,25 @@
-body,
-h1,
-ul {
+/* 1. ÜLDISED STIILID */
+body, h1, ul {
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
+h2, .view-title {
+  text-align: center;
+  margin: 30px 0;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. PÄIS (HEADER) JA NAVIGATSIOON */
 header {
   display: flex;
   justify-content: space-between; 
@@ -15,26 +28,46 @@ header {
   color: #fff;
   padding: 0.5rem 2rem; 
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  gap: 20px; 
-}
-
-header h1 {
-  font-size: 1.2rem;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 header img {
   width: 80px; 
   height: auto; 
+  cursor: pointer;
+}
+
+.search-container {
+  position: relative;
+  flex: 2;
+  max-width: 300px;
+}
+
+#search-input {
+  padding: 10px 15px 10px 40px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  outline: none;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.15); 
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#search-input:focus {
+  background: white;
+  color: #333;
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 nav a {
@@ -42,80 +75,25 @@ nav a {
   padding: 0.6rem 1rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  transition: 0.3s ease;
-}
-
-nav a:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.search-container {
-  position: relative;
-  margin-right: auto; 
-  margin-left: 20px;
-  z-index: 20;
-}
-
-#search-input {
-  padding: 10px 15px 10px 40px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  width: 180px;
-  outline: none;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.15); 
   color: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-#search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-#search-input:focus {
-  width: 250px;
-  background: white;
-  color: #333;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border-color: transparent;
-}
-
-.search-icon {
+#cart-count {
   position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.7);
-  pointer-events: none;
-  transition: 0.3s;
+  top: -10px; 
+  right: -5px;
+  background: #ff4b2b;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
 }
 
-#search-input:focus + .search-icon {
-  color: #4a00e0; 
-}
-
-
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  #search-input {
-    width: 100%;
-  }
-  
-  #search-input:focus {
-    width: 100%;
-  }
-
-  header h1 {
-    position: static;
-    transform: none;
-  }
-}
-
+/* 3. TOODETE LIST JA KAARDID */
 #product-list {
   display: flex;
   flex-wrap: wrap;
@@ -125,499 +103,216 @@ nav a:hover {
 }
 
 .product-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 260px;
-  text-align: center;
-  transition: 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 15px; 
+    width: 280px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    
+    transition: transform 0.3s ease;
+    
+    min-height: 450px; 
+    height: auto; 
 }
 
-.product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+.product-image {
+    height: 150px; 
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
-
-.product-card img {
-  max-width: 200px; 
-  height: auto; 
-  display: block;
-  margin: 0 auto; 
-  border-radius: 8px; 
+.product-title {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.1;
+  
+    display: -webkit-box;
+    overflow: hidden;
+    height: 4rem; 
 }
-
 .product-card h3 {
-  font-size: 1.2rem;
-  margin: 10px 0;
-  color: #222;
-  font-weight: 600;
+  font-size: 1.1rem;
+  height: 2.5rem;
+  overflow: hidden;
 }
 
-.product-card p {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.product-card button {
-  margin: 6px 0;
-  padding: 10px;
-  font-size: 0.95rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.25s ease;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.product-card button:hover {
-  transform: scale(1.05);
+.add-to-cart, 
+.add-to-favorites {
+    width: 100%;
+    padding: 10px; 
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .add-to-cart {
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  color: #fff;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
 }
-
-.add-to-cart:hover {
-  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-}
-
 .add-to-favorites {
-  background: linear-gradient(135deg, #f7971e, #ffd200);
-  color: #fff;
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: white;
 }
 
 .add-to-favorites:hover {
-  background: linear-gradient(135deg, #f9a825, #ffeb3b);
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(247, 151, 30, 0.3);
+    background: linear-gradient(135deg, #f9a825, #ffeb3b);
 }
 
-h2 {
-  text-align: center;
-  margin: 30px 0;
-  color: #333;
-  font-size: 2rem;
-  font-weight: 600;
+
+.add-to-favorites.red-style {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
 }
 
-@media (max-width: 768px) {
-  .product-card {
-    width: 45%;
-  }
+
+.add-to-favorites i {
+    font-size: 1rem;
 }
 
-@media (max-width: 480px) {
-  .product-card {
-    width: 100%;
-  }
+/* 4. OSTUKORVI VAADE */
+.cart-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-#cart-count {
-  position: absolute;
-  top: -10px; 
- 
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.75rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+.cart-row {
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
 }
-
-#product-details {
-  max-width: 600px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  animation: fadeIn 0.4s ease;
-}
-
-#product-details h2 {
-  margin-top: 0;
-  color: #222;
-}
-
-#product-details button {
-  margin: 10px 8px 0 0;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s ease;
-}
-
-#product-details button:hover {
-  transform: scale(1.05);
-}
-
-#cart-view {
-  max-width: 700px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  animation: fadeIn 0.4s ease;
-}
-
-#cart-view h2 {
-  margin-top: 0;
-}
-
-#cart-view div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 8px 0;
-}
-
-#cart-view input[type="number"] {
+.cart-thumb {
   width: 60px;
-  padding: 4px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  height: 60px;
+  object-fit: contain;
 }
 
-#favorites-view {
-  max-width: 600px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  animation: fadeIn 0.4s ease;
+.cart-info {
+  flex: 2;
+  padding: 0 20px;
 }
 
-#favorites-view h2 {
-  margin-top: 0;
+.cart-subtotal {
+  font-weight: bold;
+  color: #4a00e0;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.remove-item {
+  background: transparent;
+  color: #ff4b2b; 
+  border: 2px solid #ff4b2b;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
 }
+
+.remove-item:hover {
+  background: #ff4b2b;
+  color: #fff;
+}
+
+.cart-total-section {
+  text-align: right;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border-top: 2px solid #eee;
+}
+
+#btn-checkout {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 5. FILTRID */
 #category-filters {
   display: flex;
   gap: 12px;
-  margin: 30px 0;
+  margin: 20px 0;
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .filter-btn {
-  padding: 10px 22px;
+  padding: 8px 18px;
   cursor: pointer;
   background: #fff;
   color: #4a00e0; 
   border: 2px solid #4a00e0;
-  border-radius: 50px; 
+  border-radius: 50px;
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  text-transform: capitalize;
 }
+
 .filter-btn:hover {
-  background: linear-gradient(
-    135deg,
-    #8e2de2,
-    #4a00e0
-  ); 
-  color: #fff;
-  transform: translateY(-3px); 
-  box-shadow: 0 6px 15px rgba(74, 0, 224, 0.3);
-  border-color: transparent;
-}
-.filter-btn:active {
-  transform: translateY(-1px);
-}
-.product-image {
-  height: 180px;
-  width: 100%;
-  object-fit: contain;
-  margin-bottom: 15px;
-}
-.remove-fav {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  margin-top: 10px;
-}
-.remove-fav:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
-}
-.remove-item {
-  background: #fff;
-  color: #e74c3c; 
-  border: 2px solid #e74c3c;
-  padding: 6px 15px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-.remove-item:hover {
-  background: #e74c3c;
-  color: #fff;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
-}
-#btn-buy {
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  color: white;
-  margin-right: 10px;
-}
-#btn-buy:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 114, 255, 0.4);
-}
-#btn-clear,
-.remove-item {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  color: white;
-}
-.remove-item {
-  background-color: #ffffff;
-  color: #ff4b2b; 
-  border: 2px solid #ff4b2b;
-  width: 35px; 
-  height: 35px;
-  border-radius: 50%; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(255, 75, 43, 0.1);
-  padding: 0;
-  line-height: 1;
-}
-.remove-item:hover {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  color: #ffffff;
-  transform: rotate(90deg) scale(1.1);
-  box-shadow: 0 4px 12px rgba(255, 65, 108, 0.3);
-  border-color: transparent;
-}
-
-.product-details-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.details-layout {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-
-.details-image-container {
-  flex: 1;
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: center;
-}
-
-.detail-image {
-  max-width: 100%;
-  max-height: 400px;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.detail-image:hover {
-  transform: scale(1.02);
-}
-
-.details-info {
-  flex: 1.2;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.details-info h2 {
-  text-align: left; 
-  margin: 0;
-  font-size: 1.8rem;
-}
-
-.price-large {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #4a00e0;
-  margin: 10px 0;
-}
-
-.description-box {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 4px solid #4a00e0;
-}
-
-.description-box h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #222;
-}
-
-.detail-buttons {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-
-@media (max-width: 768px) {
-  .details-layout {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .details-info h2 {
-    text-align: center;
-  }
-}
-.hero {
-  height: 600px;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-  url('https://www.rollingstone.com/wp-content/uploads/2025/09/DSC0420-1.jpg?w=1581&h=1054&crop=1');
-  background-color: #000000;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center 10%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  border-radius: 16px;
-  margin: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.hero-content h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 25px;
-  opacity: 0.9;
-}
-
-.hero-btn {
-  padding: 12px 30px;
-  font-size: 1.1rem;
-  background: #fff;
-  color: #4a00e0;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s ease;
-}
-
-.hero-btn:hover {
-  transform: scale(1.1);
   background: #4a00e0;
-  color: white;
+  color: #fff;
 }
 
-
-#hero-section {
-  display: none;
-}
+/* 6. FOOTER */
 footer {
   background: linear-gradient(135deg, #2c3e50, #4a00e0); 
   color: #fff;
-  padding: 40px 20px 20px;
+  padding: 40px 20px;
   margin-top: 50px;
-  border-radius: 16px 16px 0 0;
-}
-
-.footer-content {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-section {
-  flex: 1;
-  min-width: 200px;
-}
-
-.footer-section h4 {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  display: inline-block;
-  padding-bottom: 5px;
-}
-
-.footer-section p {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  line-height: 1.6;
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 8px;
-}
-
-.footer-section a {
-  color: #fff;
-  text-decoration: none;
-  opacity: 0.7;
-  transition: 0.3s;
-  font-size: 0.9rem;
-}
-
-.footer-section a:hover {
-  opacity: 1;
-  padding-left: 5px;
-}
-
-.footer-bottom {
   text-align: center;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1;
+}
+/* 7. LOGI SISSE NUPU STIILIPARANDUS  */
+#nav-login {
+    background: rgba(255, 255, 255, 0.2); 
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 8px 22px;
+    border-radius: 50px; 
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+#nav-login:hover {
+    background: #ffffff;
+    color: #4a00e0; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    border-color: white;
+}
+
+#nav-login:active {
+    transform: translateY(0);
+}
+/* 8. RESPONSIIVSUS */
+@media (max-width: 768px) {
+  .product-card { width: 45%; }
+}
+
+@media (max-width: 480px) {
+  .product-card { width: 100%; }
 }
